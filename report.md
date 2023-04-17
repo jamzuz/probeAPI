@@ -65,7 +65,7 @@ Returns a JSON object representing a single block:
         {
             "id": 2,
             "name": "Probe 2",
-            "temperature": 22.8,
+            "temperature": null,
             "status": "error"
         }
     ]
@@ -88,7 +88,7 @@ Returns a JSON array of objects, where each object represents a probe in the spe
     {
         "id": 2,
         "name": "Probe 2",
-        "temperature": 22.8,
+        "temperature": null,
         "status": "error"
     }
 ]
