@@ -16,13 +16,13 @@
 | name        | text                  |                                   |
 | operational      | boolean              |                                   |
 
-### Reading table
+### Data table
 
 | Column Name | Data Type               | Constraints                       |
 |-------------|------------------------|-----------------------------------|
 | id          | integer                | Primary Key, Autoincrement        |
 | probe_id    | integer                | Foreign Key, references Probe(id) |
-| temperature | real                   |                                   |
+| temperature | float                   |                                   |
 | timestamp   | timestamp with timezone |                                   |
 
 ## Endpoints
