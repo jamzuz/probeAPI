@@ -14,7 +14,7 @@
 | id          | integer               | Primary Key, Autoincrement       |
 | block_id    | integer               | Foreign Key, references Block(id) |
 | name        | text                  |                                   |
-| status      | integer               |                                   |
+| operational      | boolean              |                                   |
 
 ### Reading table
 
@@ -60,13 +60,13 @@ Returns a JSON object representing a single block:
             "id": 1,
             "name": "Probe 1",
             "temperature": 23.4,
-            "status": "ok"
+            "operational": "true"
         },
         {
             "id": 2,
             "name": "Probe 2",
             "temperature": null,
-            "status": "error"
+            "operational": "error"
         }
     ]
 }
@@ -83,13 +83,13 @@ Returns a JSON array of objects, where each object represents a probe in the spe
         "id": 1,
         "name": "Probe 1",
         "temperature": 23.4,
-        "status": "ok"
+        "operational": "true"
     },
     {
         "id": 2,
         "name": "Probe 2",
         "temperature": null,
-        "status": "error"
+        "operational": "false"
     }
 ]
 ```
@@ -104,7 +104,7 @@ Returns a JSON object representing a single probe:
         "id": 1,
         "name": "Probe 1",
         "temperature": 23.4,
-        "status": "ok"
+        "operational": "true"
     }
 ]
 ```
