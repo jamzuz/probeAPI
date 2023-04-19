@@ -1,22 +1,44 @@
 from fastapi import HTTPException
-from .schemas import BlockBase
+from .schemas import *
 from sqlalchemy.orm import Session
 
 from . import models
-
+# ------GENERAL CRUD OPERATIONS START HERE------
+def add_x(x, db: Session):
+    db.add(x)
+    db.commit()
+    db.refresh(x)
+    return x
+# ------CRUD OPERATIONS FOR BLOCKS START HERE------
 def read_all_blocks(db: Session):
     return db.query(models.Block).all()
 
-def add_block(block_in: BlockBase, db: Session):
-    block = models.Block(**block_in.dict())
-    db.add(block)
-    db.commit()
-    db.refresh(block)
+def read_block_by_id(db: Session, id: int):
+    block = db.query(models.Block).get(id)
+    if block is None:
+        raise HTTPException(status_code=404, detail='block not found')
     return block
 
-# def read_all_bands(db: Session):
-#     return db.query(models.Band).all()
+def add_block(block_in: BlockBase, db: Session):
+    block = models.Block(**block_in.dict())
+    return add_x(block, db)
 
+# ------CRUD OPERATIONS FOR PROBES START HERE------
+def add_probe(probe_in: ProbeBase, db: Session):
+    probe = models.Probe(**probe_in.dict())
+    return add_x(probe, db)
+
+def read_all_probes_in_block(id:int, db: Session):
+    return db.query(models.Probe).filter(models.Probe.block_id == id)
+
+def read_all_probes(db: Session):
+    return db.query(models.Probe).all()
+
+def read_probe_by_id(id:int, db: Session):
+    probe = db.query(models.Probe).get(id)
+    if probe is None:
+        raise HTTPException(status_code=404, detail='probe not found')
+    return probe
 
 # def read_band_by_id(db: Session, id: int):
 #     band = db.query(models.Band).filter(models.Band.id == id).first()

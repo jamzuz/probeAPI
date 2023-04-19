@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -6,27 +6,18 @@ from .database import Base
 class Block(Base):
     __tablename__ = 'blocks'
 
-    id = Column(Integer, primary_key=True, index=True)
+    # Define the primary key column for the Block table
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
 
+class Probe(Base):
+    __tablename__ = 'probes'
 
-    
-# class Band(Base):
-#     __tablename__ = 'bands'
-
-#     id = Column(Integer, primary_key=True, index=True)
-#     name = Column(String, nullable=False)
-#     formed = Column(Integer, nullable=tuple)
-
-#     releases = relationship('Release', back_populates='band')
-
-
-# class Release(Base):
-#     __tablename__ = 'releases'
-
-#     id = Column(Integer, primary_key=True, index=True)
-#     name = Column(String, nullable=False)
-#     year_published = Column(Integer, nullable=False)
-#     band_id = Column(Integer, ForeignKey('bands.id'))
-
-#     band = relationship('Band', back_populates='releases')
+    # Define the primary key column for the Probe table
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, nullable=False)
+    functional = Column(Boolean, nullable=False, default=True)
+    # Define the foreign key column for the Block table
+    block_id = Column(Integer, ForeignKey('blocks.id'), nullable=False)
+    # Define the one-to-many relationship between Probe and Block
+    block = relationship('Block', backref='probes')

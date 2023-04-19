@@ -1,24 +1,24 @@
 
 from fastapi import APIRouter, Depends
-from ..database.crud import read_all_blocks, add_block, read_block_by_id
-from ..database.schemas import BlockBase, Block
+from ..database.crud import read_all_probes_in_block, add_probe, read_probe_by_id, read_all_probes
+from ..database.schemas import Probe, ProbeBase, Block
 from ..database.database import get_db
 from sqlalchemy.orm import Session
 
 
-router = APIRouter(prefix='/blocks')
+router = APIRouter(prefix='/probes')
 
-# can return a list of blocks or single block depending if id is given.
-@router.get('', response_model=list[Block]|Block)
-def read_blocks(id: int = None,db: Session = Depends(get_db)):
+# can return a list of probe or single block depending if id is given.
+@router.get('', response_model=list[Probe]|Probe)
+def read_probes_in_block(id: int = None,db: Session = Depends(get_db)):
     if id is not None:
-        return read_block_by_id(db, id)
+        return read_probe_by_id(id, db)
     else:
-        return read_all_blocks(db)
-
-@router.post('', response_model=BlockBase)
-def create_block(block: BlockBase, db: Session = Depends(get_db)):
-    return add_block(block, db)
+        return read_all_probes(db)
+    
+@router.post('', response_model=ProbeBase)
+def create_probe(probe: ProbeBase, db: Session = Depends(get_db)):
+    return add_probe(probe, db)
 
 # @router.get('', response_model=list[BandAllListItem])
 # def read_bands(name: str = '', db: Session = Depends(get_db)):
