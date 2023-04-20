@@ -1,110 +1,34 @@
-## Schema
+# Data model
+## Block Class
+### The Block class represents a block of data that contains one or more probes. It contains the following attributes:
 
-### Block table
+- ```id: an integer that serves as the primary key for the Block table. It is set to autoincrement by default.```
+- ```name: a string that represents the name of the block. It is required and cannot be null.```
 
-| Column Name | Data Type              | Constraints                 |
-|-------------|-----------------------|-----------------------------|
-| id          | integer               | Primary Key, Autoincrement |
-| name        | text                  |                             |
+##### The Block class also defines a one-to-many relationship with the Probe class, where each Block may contain multiple probes. This relationship is established using the probes attribute, which is defined using the relationship function provided by SQLAlchemy. The backref parameter is set to 'probes', which means that the Probe class will have a probes attribute that will allow accessing the corresponding Block object.
 
-### Probe table
+Finally, the Block class sets up cascade delete for the Probe table when a Block is deleted to delete all associated probes. This is done using the cascade parameter of the relationship function, which is set to 'all, delete-orphan'.
 
-| Column Name | Data Type              | Constraints                       |
-|-------------|-----------------------|-----------------------------------|
-| id          | integer               | Primary Key, Autoincrement       |
-| block_id    | integer               | Foreign Key, references Block(id) |
-| name        | text                  |                                   |
-| operational      | boolean              |                                   |
+## Probe Class
+### The Probe class represents a sensor probe that belongs to a block. It contains the following attributes:
 
-### Data table
+- ```id: an integer that serves as the primary key for the Probe table. It is set to autoincrement by default.```
+-```name: a string that represents the name of the probe. It is required and cannot be null.```
+-```functional: a boolean that indicates whether the probe is functional or not. It is required and has a default value of True.```
+-```block_id: an integer that serves as a foreign key for the Block table. It is required and cannot be null.```
 
-| Column Name | Data Type               | Constraints                       |
-|-------------|------------------------|-----------------------------------|
-| id          | integer                | Primary Key, Autoincrement        |
-| probe_id    | integer                | Foreign Key, references Probe(id) |
-| temperature | float                   |                                   |
-| timestamp   | timestamp with timezone |                                   |
+##### The Probe class also defines a one-to-many relationship with the Data class, where each Probe may have multiple data measurements. The backref parameter is set to 'data', which means that the Data class will have a data attribute that will allow accessing the corresponding Probe object.
+
+Finally, when a probe is deleted, all associated data measurements are also deleted. This is done using the cascade parameter of the relationship function, which is set to 'all, delete-orphan'.
+
+## Data Class
+### The Data class represents a data measurement for a specific probe. It contains the following attributes:
+
+- ```id: an integer that serves as the primary key for the Data table. It is set to autoincrement by default.```
+-```probe_id: an integer that serves as a foreign key for the Probe table. It is required and cannot be null.```
+-```timestamp: a string that represents the timestamp of the measurement.```
+-```measurement: a float that represents the actual measurement value.```
 
 ## Endpoints
 
-### Retrieve all blocks
-
-GET /blocks
-
-Returns a JSON array of objects, where each object represents a block:
-
-```json
-[
-    {
-        "id": 1,
-        "name": "Block 1"
-    },
-    {
-        "id": 2,
-        "name": "Block 2"
-    }
-]
-```
-### Retrieve a single block
-
-GET /blocks/{block_id}
-
-Returns a JSON object representing a single block:
-
-```json
-{
-    "id": 1,
-    "name": "Block 1",
-    "probes": [
-        {
-            "id": 1,
-            "name": "Probe 1",
-            "temperature": 23.4,
-            "operational": "true"
-        },
-        {
-            "id": 2,
-            "name": "Probe 2",
-            "temperature": null,
-            "operational": "error"
-        }
-    ]
-}
-```
-
-### Retrieve all probes in a block
-GET /blocks/{block_id}/probes
-
-Returns a JSON array of objects, where each object represents a probe in the specified block:
-
-```json
-[
-    {
-        "id": 1,
-        "name": "Probe 1",
-        "temperature": 23.4,
-        "operational": "true"
-    },
-    {
-        "id": 2,
-        "name": "Probe 2",
-        "temperature": null,
-        "operational": "false"
-    }
-]
-```
-
-### Retrieve a single probe
-GET /blocks/{block_id}/probes/{probe_id}
-
-Returns a JSON object representing a single probe:
-```json
-[
-    {
-        "id": 1,
-        "name": "Probe 1",
-        "temperature": 23.4,
-        "operational": "true"
-    }
-]
-```
+# WIP
