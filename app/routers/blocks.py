@@ -1,6 +1,6 @@
 
 from fastapi import APIRouter, Depends
-from ..database.crud import read_all_blocks, add_block, read_block_by_id
+from ..database.crud import read_all_blocks, add_block, read_block_by_id, delete_block_by_id
 from ..database.schemas import BlockBase, Block
 from ..database.database import get_db
 from sqlalchemy.orm import Session
@@ -20,6 +20,9 @@ def read_blocks(id: int = None,db: Session = Depends(get_db)):
 def create_block(block: BlockBase, db: Session = Depends(get_db)):
     return add_block(block, db)
 
+@router.delete('/{id}')
+def delete_block(id: int, db: Session = Depends(get_db)):
+    return delete_block_by_id(id, db)
 # @router.get('', response_model=list[BandAllListItem])
 # def read_bands(name: str = '', db: Session = Depends(get_db)):
 #     if name != '':
