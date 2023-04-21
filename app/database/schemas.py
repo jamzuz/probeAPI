@@ -1,18 +1,18 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 # There are blocks, probes and data
-# every block has 0-n probes
+# every block has 0-n probes(in spec this is 1-n but everything start with creating a block)
 # and every probe has 0-n amount of data
 
 #  data that the probe collects
 class DataTypeBase(BaseModel):
     measurement: float
-    timestamp: str
+    timestamp: datetime
     probe_id: int
 
     class Config:
         orm_mode = True
-        # fields = {'probe_id': {'exclude' : True}}
 
 class DataType(DataTypeBase):
     id: int

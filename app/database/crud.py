@@ -1,8 +1,9 @@
 from fastapi import HTTPException
+from datetime import datetime
 from .schemas import *
 from sqlalchemy.orm import Session
-
 from . import models
+
 # ------GENERAL CRUD OPERATIONS START HERE------
 def add_x(x, db: Session):
     db.add(x)
@@ -30,7 +31,7 @@ def delete_block_by_id(id: int, db: Session):
         raise HTTPException(status_code=404, detail='block not found')
     db.delete(block)
     db.commit()
-    return {'message': 'deleted'}
+    return {'message': 'block deleted'}
 
 # ------CRUD OPERATIONS FOR PROBES START HERE------
 def add_probe(probe_in: ProbeBase, db: Session):
@@ -46,10 +47,22 @@ def read_all_probes_in_block(id:int, db: Session):
 def read_all_probes(db: Session):
     return db.query(models.Probe).all()
 
-def read_probe_by_id(id:int, db: Session):
-    probe = db.query(models.Probe).get(id)
+def read_probe_by_id(id:int, db: Session, data_limit:int = 10):
+    probe: ProbeWithData = db.query(models.Probe).get(id)
     if probe is None:
         raise HTTPException(status_code=404, detail='probe not found')
+    probe.data = probe.data[0:data_limit]        
+    return probe
+
+def read_probe_data_between_dates(id:int, db: Session, start: str, end:str):
+    start_time:datetime = datetime.fromisoformat(start)
+    end_time:datetime = datetime.fromisoformat(end)
+
+    probe: ProbeWithData = db.query(models.Probe).get(id)
+    if probe is None:
+        raise HTTPException(status_code=404, detail='probe not found')
+    filtered_data = [x for x in probe.data if start_time <= x.timestamp <= end_time]
+    probe.data = filtered_data
     return probe
 
 def delete_probe_by_id(id: int, db: Session):
@@ -58,11 +71,12 @@ def delete_probe_by_id(id: int, db: Session):
         raise HTTPException(status_code=404, detail='probe not found')
     db.delete(probe)
     db.commit()
-    return {'message': 'deleted'}
+    return {'message': 'probe deleted'}
 
 # ------CRUD OPERATIONS FOR MEASUREMENT DATA START HERE------
-
+# currently only takes utcnow() timestamp, cant manually change data.
 def add_measurements(data_in:DataTypeBase, db: Session):
+    data_in.timestamp = datetime.utcnow()
     data = models.Data(**data_in.dict())
     probe = db.query(models.Probe).get(data_in.probe_id)
     if probe is None:

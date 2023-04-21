@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter(prefix='/measurements')
 
-# # can return a list of measurements or a single measurement depending if id is given.
+# can return a list of measurements or a single measurement depending if id is given.
 @router.get('', response_model=list[DataType]|DataType)
 def read_measurements(id: int = None,db: Session = Depends(get_db)):
     if id is not None:
@@ -19,7 +19,3 @@ def read_measurements(id: int = None,db: Session = Depends(get_db)):
 @router.post('', response_model=DataTypeBase)
 def add_measurement(data: DataTypeBase, db: Session = Depends(get_db)):
     return add_measurements(data, db)
-
-# @router.delete('')
-# def delete_block(id: int, db: Session = Depends(get_db)):
-#     return delete_block_by_id(id, db)
