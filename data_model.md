@@ -25,6 +25,12 @@
 -```timestamp: a string that represents the timestamp of the measurement.```
 -```measurement: a float that represents the actual measurement value.```
 
-## Endpoints
+## Error Class
+### The Error class represents an error in a specific probe. It contains the following attributes:
 
-# WIP
+- ```id: an integer that serves as the primary key for the Error table. It is set to autoincrement by default.```
+-```probe_id: an integer that serves as a foreign key for the Probe table. It is required and cannot be null.```
+-```time_of_error: a string that represents the timestamp of the error.```
+
+## Endpoints
+# All the necessary information relating to the endpoints is in the schema and FastAPI docs

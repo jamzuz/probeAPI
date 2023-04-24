@@ -3,7 +3,8 @@ from datetime import datetime
 
 # There are blocks, probes and data
 # every block has 0-n probes(in spec this is 1-n but everything start with creating a block)
-# and every probe has 0-n amount of data
+# every probe has 0-n amount of data
+# and 0-n amount of errors
 
 #  data that the probe collects
 class DataTypeBase(BaseModel):
@@ -15,6 +16,16 @@ class DataTypeBase(BaseModel):
         orm_mode = True
 
 class DataType(DataTypeBase):
+    id: int
+
+class ErrorBase(BaseModel):
+    time_of_error: datetime
+    probe_id: int
+
+    class Config:
+        orm_mode = True
+
+class Error(ErrorBase):
     id: int
 
 class ProbeBase(BaseModel):
@@ -32,11 +43,11 @@ class Probe(ProbeBase):
 class ProbeWithData(Probe):
     data: list[DataType]
 
-# no reason to show block_id in this class because it only comes up when looking up blocks via id
-class ProbeInBlock(Probe):
-    class Config:
-        fields = {'block_id': {'exclude' : True}}
+class ProbeWithErrors(Probe):
+    errors: list[Error]
 
+class ProbeInBlock(Probe):
+    data: list[DataType]
 
 class BlockBase(BaseModel):
     name: str
@@ -50,3 +61,6 @@ class Block(BlockBase):
     id: int
     probes: list[ProbeInBlock] 
 
+class Blocks(BlockBase):
+    id: int
+    probes: list[ProbeBase]

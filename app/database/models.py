@@ -23,6 +23,7 @@ class Probe(Base):
     block_id = Column(Integer, ForeignKey('blocks.id'), nullable=False)
     # when deleting a probe all data is also deleted
     data = relationship('Data', backref='data', cascade='all, delete-orphan')
+    errors= relationship('Errors', backref='errors', cascade='all, delete-orphan')
 
 class Data(Base):
     __tablename__ = 'data'
@@ -31,3 +32,10 @@ class Data(Base):
     probe_id = Column(Integer, ForeignKey('probes.id'), nullable=False)
     timestamp = Column(DateTime)
     measurement = Column(Float)
+
+class Errors(Base):
+    __tablename__ = 'errors'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    probe_id = Column(Integer, ForeignKey('probes.id'), nullable=False)
+    time_of_error = Column(DateTime)
