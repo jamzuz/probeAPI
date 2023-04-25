@@ -1,4 +1,4 @@
-## how to install
+# how to install
 
 ### *this project has been made with python 3.10
 ### clone the repository, navigate to the install directory and setup your virtual enviroment if you dont want to install everything globally
