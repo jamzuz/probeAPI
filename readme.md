@@ -1,8 +1,9 @@
 ## how to install
 
 ### *this project has been made with python 3.10
-### first setup your virtual enviroment if you dont want to install everything globally
+### clone the repository, navigate to the install directory and setup your virtual enviroment if you dont want to install everything globally
 ### Note: Project currently contains the PROBEapi_db.db file which contains mockdata, if you would like to run the api without data just delete the file and start the program again.
+
 ### install steps: 
 
 ### `start/activate/create your virtual enviroment`
